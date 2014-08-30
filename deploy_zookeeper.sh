@@ -6,7 +6,7 @@ hostFile=$1
 finalCfgFile="./zoo.cfg"
 templateCfgFile="./zoo_template.cfg"
 pathToZookeekerRoot="./zookeeper"
-zipFile=${pathToZookeekerRoot}.zip
+zipFile=${pathToZookeekerRoot}.tar.gz
 preSftpCommand="pre_sftp_command"
 sftpCommand="sftp_command"
 sshCommand="ssh_command"
@@ -27,7 +27,7 @@ done < $hostFile
 
 count=0
 cp $finalCfgFile $pathToZookeekerRoot/conf/$finalCfgFile
-zip -r $zipFile $pathToZookeekerRoot > /dev/null
+tar -zcvf $zipFile $pathToZookeekerRoot > /dev/null
 
 # Create pre sftp command
 echo "./zkServer.sh stop" >> $preSftpCommand
@@ -37,7 +37,7 @@ echo "rm -rf $pathToZookeekerRoot"  > $preSftpCommand
 echo "put $zipFile"  > $sftpCommand
 
 # Create ssh command
-echo "unzip $zipFile"  > $sshCommand
+echo "tar -zxvf $zipFile"  > $sshCommand
 echo "rm $zipFile"  >> $sshCommand
 
 while read line 
